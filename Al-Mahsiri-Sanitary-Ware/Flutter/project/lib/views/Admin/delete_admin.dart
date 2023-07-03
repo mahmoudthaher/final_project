@@ -65,13 +65,13 @@ class _DeleteAdminState extends State<DeleteAdmin> {
                 ),
                 Row(
                   children: const [
-                    SizedBox(width: 20),
+                    SizedBox(width: 17),
                     Text(
                       "الأسم\nالأول",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
                     ),
-                    SizedBox(width: 40),
+                    SizedBox(width: 25),
                     Text(
                       "الأسم\nالأخير",
                       style:
@@ -81,7 +81,7 @@ class _DeleteAdminState extends State<DeleteAdmin> {
                     Text("الايميل",
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w800)),
-                    SizedBox(width: 70),
+                    SizedBox(width: 60),
                     Text("رقم الهاتف",
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w800)),
@@ -125,7 +125,7 @@ class _DeleteAdminState extends State<DeleteAdmin> {
                                         style: const TextStyle(fontSize: 17),
                                       ),
                                     ),
-                                    const SizedBox(width: 20),
+                                    const SizedBox(width: 15),
                                     SizedBox(
                                       width: 130,
                                       child: Text(
@@ -134,9 +134,9 @@ class _DeleteAdminState extends State<DeleteAdmin> {
                                         style: const TextStyle(fontSize: 17),
                                       ),
                                     ),
-                                    const SizedBox(width: 35),
+                                    const SizedBox(width: 30),
                                     SizedBox(
-                                      width: 100,
+                                      width: 110,
                                       child: Text(
                                         user.phoneNumber!,
                                         style: const TextStyle(fontSize: 17),

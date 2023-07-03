@@ -16,6 +16,10 @@ class CategoriesAdmin extends StatefulWidget {
 }
 
 class _CategoriesAdminState extends State<CategoriesAdmin> {
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
+  AutovalidateMode _autovalidateMode2 = AutovalidateMode.disabled;
+  AutovalidateMode _autovalidateMode3 = AutovalidateMode.disabled;
+
   final createController = TextEditingController();
   final updateController = TextEditingController();
   String _create = "";
@@ -33,8 +37,9 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    var provider = Provider.of<CategoryProvider>(context, listen: false);
-    provider.getAllCategoryAdmin();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetchData();
+    });
   }
 
   @override
@@ -71,6 +76,7 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                     ),
                     Form(
                       key: _keyFormCreate,
+                      autovalidateMode: _autovalidateMode,
                       child: Column(
                         children: [
                           SizedBox(
@@ -115,7 +121,10 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                               validator: (value) {
                                 checkCategory();
                                 if (value == null || value.isEmpty) {
-                                  return "الرجاء إدخال التصنيف";
+                                  if (_autovalidateMode ==
+                                      AutovalidateMode.always) {
+                                    return "الرجاء إدخال التصنيف";
+                                  }
                                 } else if (checkcategory == 1) {
                                   return "إسم التصنيف موجود مسبقا";
                                 }
@@ -139,6 +148,8 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                                 onTap: () {
                                   if (mounted) {
                                     setState(() {
+                                      _autovalidateMode =
+                                          AutovalidateMode.always;
                                       if (_keyFormCreate.currentState!
                                           .validate()) {
                                         messageCreate(context);
@@ -191,6 +202,7 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                     ),
                     Form(
                       key: _keyFormUpdate,
+                      autovalidateMode: _autovalidateMode2,
                       child: Column(
                         children: [
                           Container(
@@ -219,7 +231,7 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                                   hint: const Text(
                                     'تحديد التصنيف',
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 17,
                                         fontWeight: FontWeight.w800),
                                   ),
                                   items: category.map((e) {
@@ -245,7 +257,10 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                                       AutovalidateMode.onUserInteraction,
                                   validator: (value) {
                                     if (value == null) {
-                                      return 'الرجاء ادخال المدينة';
+                                      if (_autovalidateMode2 ==
+                                          AutovalidateMode.always) {
+                                        return "الرجاء إدخال التصنيف";
+                                      }
                                     }
                                     return null;
                                   },
@@ -306,7 +321,10 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                               validator: (value) {
                                 checkCategory2();
                                 if (value == null || value.isEmpty) {
-                                  return "الرجاء إدخال التصنيف";
+                                  if (_autovalidateMode2 ==
+                                      AutovalidateMode.always) {
+                                    return "الرجاء إدخال التصنيف";
+                                  }
                                 } else if (checkcategory2 == 1) {
                                   return "إسم التصنيف موجود مسبقا";
                                 }
@@ -325,9 +343,10 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                                 onTap: () {
                                   if (mounted) {
                                     setState(() {
+                                      _autovalidateMode2 =
+                                          AutovalidateMode.always;
                                       if (_keyFormUpdate.currentState!
                                           .validate()) {
-                                        print(selectedCategoryU);
                                         messageUpdate(context);
                                       }
                                     });
@@ -378,6 +397,7 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                     ),
                     Form(
                       key: _keyFormDelete,
+                      autovalidateMode: _autovalidateMode3,
                       child: Column(
                         children: [
                           Container(
@@ -406,7 +426,7 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                                   hint: const Text(
                                     'تحديد التصنيف',
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 17,
                                         fontWeight: FontWeight.w800),
                                   ),
                                   items: category.map((e) {
@@ -432,7 +452,10 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                                       AutovalidateMode.onUserInteraction,
                                   validator: (value) {
                                     if (value == null) {
-                                      return 'الرجاء ادخال المدينة';
+                                      if (_autovalidateMode3 ==
+                                          AutovalidateMode.always) {
+                                        return "الرجاء إدخال التصنيف";
+                                      }
                                     }
                                     return null;
                                   },
@@ -457,6 +480,8 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                                 onTap: () {
                                   if (mounted) {
                                     setState(() {
+                                      _autovalidateMode3 =
+                                          AutovalidateMode.always;
                                       if (_keyFormDelete.currentState!
                                           .validate()) {
                                         messageDelete(context);
@@ -534,65 +559,15 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                       style:
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
                     ),
-                    onTap: () {
+                    onTap: () async {
                       CategoryController()
                           .create(CategoryModel(category: _create));
                       Navigator.pop(context);
+                      await fetchData();
                       EasyLoading.dismiss();
                       EasyLoading.showSuccess("تم اضافة التصنيف بنجاح");
-                      createController.text = "";
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  messageDelete(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('تاكيد عملية الحذف'),
-          content: const Text('يرجى التاكيد على عملية الحذف'),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                children: [
-                  InkWell(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    child: const Text(
-                      'رجوع',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(
-                    width: 200,
-                  ),
-                  InkWell(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    child: const Text(
-                      'حذف',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
-                    ),
-                    onTap: () {
-                      CategoryController().delete(selectedCategoryD!);
-                      Navigator.pop(context);
-                      EasyLoading.dismiss();
-                      EasyLoading.showSuccess("تم حذف التصنيف بنجاح");
-                      createController.text = "";
+                      createController.text = '';
+                      _autovalidateMode = AutovalidateMode.disabled;
                     },
                   ),
                 ],
@@ -639,13 +614,20 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                       style:
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
                     ),
-                    onTap: () {
+                    onTap: () async {
                       CategoryController().update(CategoryModel(
                           id: selectedCategoryU!, category: update));
+
                       Navigator.pop(context);
+                      await fetchData();
                       EasyLoading.dismiss();
                       EasyLoading.showSuccess("تم تحديث التصنيف بنجاح");
-                      updateController.text = "";
+                      setState(() {
+                        selectedCategoryU = null;
+                      });
+                      updateController.clear();
+
+                      _autovalidateMode2 = AutovalidateMode.disabled;
                     },
                   ),
                 ],
@@ -655,6 +637,73 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
         );
       },
     );
+  }
+
+  messageDelete(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('تاكيد عملية الحذف'),
+          content: const Text('يرجى التاكيد على عملية الحذف'),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                children: [
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    child: const Text(
+                      'رجوع',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  const SizedBox(
+                    width: 200,
+                  ),
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    child: const Text(
+                      'حذف',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
+                    ),
+                    onTap: () async {
+                      CategoryController().delete(selectedCategoryD!);
+                      Navigator.pop(context);
+                      await fetchData();
+                      EasyLoading.dismiss();
+                      EasyLoading.showSuccess("تم حذف التصنيف بنجاح");
+                      setState(() {
+                        selectedCategoryD = null;
+                      });
+                      _autovalidateMode3 = AutovalidateMode.disabled;
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> fetchData() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    try {
+      var provider = Provider.of<CategoryProvider>(context, listen: false);
+      provider.getAllCategoryAdmin();
+    } catch (error) {
+      rethrow;
+    }
   }
 
   int checkcategory = 0;
