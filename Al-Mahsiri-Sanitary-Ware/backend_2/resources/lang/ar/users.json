@@ -1,0 +1,17 @@
+{
+    "fistNameIsRequired":"حقل الاسم الاول اجباري لاتمام العملية",
+    "lastNameIsRequired":"حقل الاسم الاخير اجباري لاتمام العملية",
+    "phoneNumberIsRequired":"حقل رقم الهاتف اجباري لاتمام العملية",
+    "phoneNumber.unique": "رقم الهاتف غير متاح",
+    "emailIsRequired": "حقل البريد الالكتروني اجباري لاتمام العملية",
+    "email.unique": "الايميل غير متاح",
+    "email.email": "يرجى التاكد من كتابة الايميل بطريقة صحيحة",
+    "userNameIsRequired":"حقل اسم المستخدم اجباري لاتمام العملية",
+    "userName.unique": "اسم المستخدم غير متاح",
+    "passwordIsRequired":"حقل كلمة المرور اجباري لاتمام العملية",
+    "addressIsRequired":"حقل الموقع اجباري لاتمام العملية",
+    "genderIdIsRequired":"حقل الجنس اجباري لاتمام العملية",
+    "typeIdIsRequired":"حقل النوع اجباري لاتمام العملية",
+    "countryIdIsRequired":"حقل الدولة اجباري لاتمام العملية",
+    "cityIdIsRequired":"حقل المدينة اجباري لاتمام العملية"
+}

@@ -1,0 +1,11 @@
+{
+    "nameIsRequired":"حقل الاسم اجباري لاتمام العملية",
+    "name.unique": "حقل الاسم غير متاح",
+    "descriptionIsRequired":"حقل الوصف اجباري لاتمام العملية",
+    "priceIsRequired":"حقل السعر اجباري لاتمام العملية",
+    "price.number": "حقل السعر يجب ان يكون مكون من ارقام",
+    "quantityInStockIsRequired":"حقل الكمية في المخزن اجباري لاتمام العملية",
+    "quantityInStock.number": "حقل الكمية في المخزن يجب ان يكون مكون من ارقام",
+    "imageIsRequired":"حقل الصورة اجباري لاتمام العملية",
+    "categoryIdIsRequired":"حقل الفئة اجباري لاتمام العملية"
+}

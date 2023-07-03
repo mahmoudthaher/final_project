@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "711310079526",
+    "project_id": "al-mahsiri-sanitary-ware",
+    "storage_bucket": "al-mahsiri-sanitary-ware.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711310079526:android:d8de0dbd23d4cf33c098e7",
+        "android_client_info": {
+          "package_name": "com.example.project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD80qkGkjyFK7VI-oaGHzz_rp5Jl7u1aiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

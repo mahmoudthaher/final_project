@@ -1,0 +1,7 @@
+{
+    "nameIsRequired": "حقل الاسم اجباري لاتمام العملية",
+    "name.unique": " حقل الاسم غير متاح",
+    "descriptionIsRequired": "حقل الوصف اجباري لاتمام العملية",
+    "discountPercentIsRequired": "حقل نسبة الخصم اجباري لاتمام العملية",
+    "discountPercent.number": "حقل نسبة الخصم يجب ان يكون مكون من ارقام"
+}
