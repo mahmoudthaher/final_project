@@ -41,7 +41,7 @@ export default class CategoriesController {
 
     }
     public async checkCategory(ctx: HttpContextContract) {
-        var category = ctx.params.category;
+        var category = decodeURIComponent(ctx.params.category);
        
         var result = Category.query().select('category').where("category", category);
         return result;
