@@ -79,7 +79,7 @@ export default class CategoriesController {
     public async destory(ctx: HttpContextContract) {
         var id = ctx.params.id;
         var category = await Category.findOrFail(id);
-        const products = await Product.query().where('id', id).preload('category')
+        const products = await Product.query().where('category_id', id).preload('category')
    
   
   for (const product of products) {
