@@ -138,7 +138,7 @@ export default class ProductsController {
         return { message: "The product has been deleted!" };
     }
     public async checkProduct(ctx: HttpContextContract) {
-        var product = decodeURIComponent(ctx.params.name);
+        var product = decodeURIComponent(ctx.params.product);
         var result = Product.query().select('name').where('name',product);
         return result;
     }
