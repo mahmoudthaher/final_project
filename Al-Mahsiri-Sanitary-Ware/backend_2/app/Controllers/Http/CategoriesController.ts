@@ -2,6 +2,7 @@ import I18n from '@ioc:Adonis/Addons/I18n';
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Category from 'App/Models/Category';
+import Product from 'App/Models/Product';
 export default class CategoriesController {
     public async getAll(ctx: HttpContextContract) {
         var category = ctx.request.input("category");
@@ -78,6 +79,12 @@ export default class CategoriesController {
     public async destory(ctx: HttpContextContract) {
         var id = ctx.params.id;
         var category = await Category.findOrFail(id);
+        const products = await Product.query().where('id', id).preload('category')
+   
+  
+  for (const product of products) {
+    await product.delete();
+  }
         await category.delete();
         return { message: "The category has been deleted!" };
     }

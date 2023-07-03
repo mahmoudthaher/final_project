@@ -65,10 +65,7 @@ export default class OrdersController {
     
     public async destory(ctx: HttpContextContract) {
         const id = ctx.params.id;
-      
-        
-      
-        //const user = await User.findOrFail(id);
+     
       
         const orders = await Order.query().where('id', id).preload('orderAddress').preload('orderProducts');
       
@@ -83,14 +80,8 @@ export default class OrdersController {
       
           await order.delete();
         }
-      
-        
-      
         return { message: "The order has been deleted!" };
-        // var id = ctx.params.id;
-        // var order = await Order.findOrFail(id);
-        // await order.delete();
-        // return { message: "The order has been deleted!" };
+       
     }
 
     public async callOrder(ctx: HttpContextContract) {
