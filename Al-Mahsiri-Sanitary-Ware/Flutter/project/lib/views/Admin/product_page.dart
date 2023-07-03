@@ -47,17 +47,22 @@ class _ProductAdminState extends State<ProductAdmin> {
   final _keyFormDelete = GlobalKey<FormState>();
   int? selectedCategoryC;
   String? categorynameC;
+  int? selectedCategoryUCategory;
   int? selectedCategoryU;
   String? categorynameU;
   int? selectedCategoryU2;
   String? categorynameU2;
   int? selectedCategoryD;
+  int? selectedCategoryD1;
   String? categorynameD;
   String? uniqueNameUpdate;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    var emptyId = Provider.of<ProductProvider>(context, listen: false);
+    emptyId.id2 = 1;
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetchData();
     });
@@ -68,7 +73,8 @@ class _ProductAdminState extends State<ProductAdmin> {
     var provider = Provider.of<CategoryProvider>(context);
     List<CategoryModel> category = provider.categoriesAdmin;
     var providerProduct = Provider.of<ProductProvider>(context);
-    List<ProductModel> product = providerProduct.productsAll;
+    List<ProductModel> product = providerProduct.products2;
+    List<ProductModel> product3 = providerProduct.products3;
 
     return Container(
         decoration: const BoxDecoration(
@@ -353,6 +359,7 @@ class _ProductAdminState extends State<ProductAdmin> {
                               padding:
                                   const EdgeInsets.only(left: 10, right: 25),
                               child: SizedBox(
+                                height: 60,
                                 child: DropdownButtonFormField(
                                   icon: const Icon(Icons.arrow_drop_down,
                                       color: Colors.black),
@@ -366,7 +373,7 @@ class _ProductAdminState extends State<ProductAdmin> {
                                   hint: const Text(
                                     'تحديد التصنيف',
                                     style: TextStyle(
-                                        fontSize: 17,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w800),
                                   ),
                                   items: category.map((e) {
@@ -485,13 +492,110 @@ class _ProductAdminState extends State<ProductAdmin> {
                                 color: Colors.black,
                               ),
                             ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 25),
+                              child: SizedBox(
+                                child: SizedBox(
+                                  height: 60,
+                                  child: DropdownButtonFormField(
+                                    icon: const Icon(Icons.arrow_drop_down,
+                                        color: Colors.black),
+                                    decoration: const InputDecoration(
+                                      errorStyle: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700),
+                                      border: InputBorder.none,
+                                    ),
+                                    value: selectedCategoryUCategory,
+                                    hint: const Text(
+                                      'تحديد التصنيف',
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                    items: category.map((e) {
+                                      return DropdownMenuItem(
+                                        value: e.id,
+                                        child: Text(
+                                          e.category,
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w600,
+                                              height: 1.0),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      if (mounted) {
+                                        setState(() {
+                                          selectedCategoryUCategory = value;
+                                          providerProduct.id2 =
+                                              selectedCategoryUCategory!;
+                                          fetchData();
+                                          nameController.text = "";
+                                          priceController.text = "";
+                                          quantityInSstockController.text = "";
+                                          imageontroller.text = "";
+                                          setState(() {
+                                            selectedCategoryC = null;
+                                          });
+                                          //update
+                                          nameController2.text = "";
+                                          priceController2.text = "";
+                                          quantityInSstockController2.text = "";
+                                          imageontroller2.text = "";
+                                          setState(() {
+                                            selectedCategoryU = null;
+                                            selectedCategoryU2 = null;
+                                          });
+                                          //delete
+                                          setState(() {
+                                            selectedCategoryD = null;
+                                          });
+                                        });
+                                      }
+                                    },
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    validator: (value) {
+                                      if (product.isEmpty) {
+                                        return 'لا يوجد منتجات في هذا التصنيف';
+                                      }
+                                      if (value == null) {
+                                        if (_autovalidateMode3 ==
+                                            AutovalidateMode.always) {
+                                          return 'الرجاء ادخال المنتج';
+                                        }
+                                      }
+
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              border: Border.all(
+                                style: BorderStyle.solid,
+                                width: 0.4,
+                                color: Colors.black,
+                              ),
+                            ),
                             child: SizedBox(
+                              height: 60,
                               child: DropdownButtonFormField(
                                 icon: const Icon(Icons.arrow_drop_down,
                                     color: Colors.black),
                                 decoration: const InputDecoration(
                                   errorStyle: TextStyle(
-                                      fontSize: 17.0,
+                                      fontSize: 20.0,
                                       fontWeight: FontWeight.w700),
                                   border: InputBorder.none,
                                 ),
@@ -819,12 +923,13 @@ class _ProductAdminState extends State<ProductAdmin> {
                               padding:
                                   const EdgeInsets.only(left: 10, right: 25),
                               child: SizedBox(
+                                height: 60,
                                 child: DropdownButtonFormField(
                                   icon: const Icon(Icons.arrow_drop_down,
                                       color: Colors.black),
                                   decoration: const InputDecoration(
                                     errorStyle: TextStyle(
-                                        fontSize: 17.0,
+                                        fontSize: 20.0,
                                         fontWeight: FontWeight.w700),
                                     border: InputBorder.none,
                                   ),
@@ -952,58 +1057,152 @@ class _ProductAdminState extends State<ProductAdmin> {
                                 color: Colors.black,
                               ),
                             ),
-                            child: DropdownButtonFormField(
-                              icon: const Icon(Icons.arrow_drop_down,
-                                  color: Colors.black),
-                              decoration: const InputDecoration(
-                                errorStyle: TextStyle(
-                                    fontSize: 17.0,
-                                    fontWeight: FontWeight.w700),
-                                border: InputBorder.none,
-                              ),
-                              value: selectedCategoryD,
-                              hint: const Padding(
-                                padding: EdgeInsets.only(left: 10, right: 25),
-                                child: Text(
-                                  'تحديد المنتج',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w800),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 25),
+                              child: SizedBox(
+                                height: 60,
+                                child: DropdownButtonFormField(
+                                  icon: const Icon(Icons.arrow_drop_down,
+                                      color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    errorStyle: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.w700),
+                                    border: InputBorder.none,
+                                  ),
+                                  value: selectedCategoryD1,
+                                  hint: const Text(
+                                    'تحديد التصنيف',
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                  items: category.map((e) {
+                                    return DropdownMenuItem(
+                                      value: e.id,
+                                      child: Text(
+                                        e.category,
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600,
+                                            height: 1.0),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    if (mounted) {
+                                      setState(() {
+                                        selectedCategoryD1 = value;
+                                        providerProduct.id3 =
+                                            selectedCategoryD1!;
+                                        fetchData();
+                                        nameController.text = "";
+                                        priceController.text = "";
+                                        quantityInSstockController.text = "";
+                                        imageontroller.text = "";
+                                        setState(() {
+                                          selectedCategoryC = null;
+                                        });
+                                        //update
+                                        nameController2.text = "";
+                                        priceController2.text = "";
+                                        quantityInSstockController2.text = "";
+                                        imageontroller2.text = "";
+                                        setState(() {
+                                          selectedCategoryU = null;
+                                          selectedCategoryU2 = null;
+                                        });
+                                        //delete
+                                        setState(() {
+                                          selectedCategoryD = null;
+                                        });
+                                      });
+                                    }
+                                  },
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  validator: (value) {
+                                    if (product3.isEmpty) {
+                                      return 'لا يوجد منتجات في هذا التصنيف';
+                                    }
+                                    if (value == null) {
+                                      return 'الرجاء ادخال التصنيف';
+                                    }
+                                    return null;
+                                  },
                                 ),
                               ),
-                              items: product.map((e) {
-                                return DropdownMenuItem(
-                                  value: e.id,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              border: Border.all(
+                                style: BorderStyle.solid,
+                                width: 0.4,
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: SizedBox(
+                              height: 60,
+                              child: DropdownButtonFormField(
+                                icon: const Icon(Icons.arrow_drop_down,
+                                    color: Colors.black),
+                                decoration: const InputDecoration(
+                                  errorStyle: TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w700),
+                                  border: InputBorder.none,
+                                ),
+                                value: selectedCategoryD,
+                                hint: const Padding(
+                                  padding: EdgeInsets.only(left: 10, right: 25),
                                   child: Text(
-                                    e.name,
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600,
-                                        height: 1.0),
+                                    'تحديد المنتج',
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w800),
                                   ),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                if (mounted) {
-                                  setState(() {
-                                    selectedCategoryD = value;
-                                  });
-                                }
-                              },
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              validator: (value) {
-                                if (value == null) {
-                                  if (_autovalidateMode3 ==
-                                      AutovalidateMode.always) {
-                                    return 'الرجاء ادخال المنتج';
+                                ),
+                                items: product3.map((e) {
+                                  return DropdownMenuItem(
+                                    value: e.id,
+                                    child: Text(
+                                      e.name,
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                          height: 1.0),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  if (mounted) {
+                                    setState(() {
+                                      selectedCategoryD = value;
+                                    });
                                   }
-                                }
-                                return null;
-                              },
-                              onSaved: (value) {
-                                categorynameD = value.toString();
-                              },
+                                },
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                validator: (value) {
+                                  if (value == null) {
+                                    if (_autovalidateMode3 ==
+                                        AutovalidateMode.always) {
+                                      return 'الرجاء ادخال المنتج';
+                                    }
+                                  }
+
+                                  return null;
+                                },
+                                onSaved: (value) {
+                                  categorynameD = value.toString();
+                                },
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -1118,6 +1317,19 @@ class _ProductAdminState extends State<ProductAdmin> {
                       setState(() {
                         selectedCategoryC = null;
                       });
+                      //update
+                      nameController2.text = "";
+                      priceController2.text = "";
+                      quantityInSstockController2.text = "";
+                      imageontroller2.text = "";
+                      setState(() {
+                        selectedCategoryU = null;
+                        selectedCategoryU2 = null;
+                      });
+                      //delete
+                      setState(() {
+                        selectedCategoryD = null;
+                      });
                       _autovalidateMode = AutovalidateMode.disabled;
                     },
                   ),
@@ -1178,6 +1390,14 @@ class _ProductAdminState extends State<ProductAdmin> {
                       await fetchData();
                       EasyLoading.dismiss();
                       EasyLoading.showSuccess("تم تحديث التصنيف بنجاح");
+                      nameController.text = "";
+                      priceController.text = "";
+                      quantityInSstockController.text = "";
+                      imageontroller.text = "";
+                      setState(() {
+                        selectedCategoryC = null;
+                      });
+                      //update
                       nameController2.text = "";
                       priceController2.text = "";
                       quantityInSstockController2.text = "";
@@ -1185,6 +1405,10 @@ class _ProductAdminState extends State<ProductAdmin> {
                       setState(() {
                         selectedCategoryU = null;
                         selectedCategoryU2 = null;
+                      });
+                      //delete
+                      setState(() {
+                        selectedCategoryD = null;
                       });
                       _autovalidateMode2 = AutovalidateMode.disabled;
                     },
@@ -1239,6 +1463,23 @@ class _ProductAdminState extends State<ProductAdmin> {
                       await fetchData();
                       EasyLoading.dismiss();
                       EasyLoading.showSuccess("تم حذف المنتج بنجاح");
+                      nameController.text = "";
+                      priceController.text = "";
+                      quantityInSstockController.text = "";
+                      imageontroller.text = "";
+                      setState(() {
+                        selectedCategoryC = null;
+                      });
+                      //update
+                      nameController2.text = "";
+                      priceController2.text = "";
+                      quantityInSstockController2.text = "";
+                      imageontroller2.text = "";
+                      setState(() {
+                        selectedCategoryU = null;
+                        selectedCategoryU2 = null;
+                      });
+                      //delete
                       setState(() {
                         selectedCategoryD = null;
                       });
@@ -1259,10 +1500,12 @@ class _ProductAdminState extends State<ProductAdmin> {
 
     try {
       var provider = Provider.of<CategoryProvider>(context, listen: false);
-      provider.getAllCategoryAdmin();
+      await provider.getAllCategoryAdmin();
       var providerProduct =
           Provider.of<ProductProvider>(context, listen: false);
-      providerProduct.getAllProducts();
+      await providerProduct.getAllProductsByCategoryID2();
+
+      await providerProduct.getAllProductsByCategoryID3();
     } catch (error) {
       rethrow;
     }

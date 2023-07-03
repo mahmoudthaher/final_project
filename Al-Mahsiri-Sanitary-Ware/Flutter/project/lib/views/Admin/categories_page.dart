@@ -218,12 +218,13 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                               padding:
                                   const EdgeInsets.only(left: 10, right: 25),
                               child: SizedBox(
+                                height: 60,
                                 child: DropdownButtonFormField(
                                   icon: const Icon(Icons.arrow_drop_down,
                                       color: Colors.black),
                                   decoration: const InputDecoration(
                                     errorStyle: TextStyle(
-                                        fontSize: 17.0,
+                                        fontSize: 20.0,
                                         fontWeight: FontWeight.w700),
                                     border: InputBorder.none,
                                   ),
@@ -231,7 +232,7 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                                   hint: const Text(
                                     'تحديد التصنيف',
                                     style: TextStyle(
-                                        fontSize: 17,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w800),
                                   ),
                                   items: category.map((e) {
@@ -413,6 +414,7 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                               padding:
                                   const EdgeInsets.only(left: 10, right: 25),
                               child: SizedBox(
+                                height: 60,
                                 child: DropdownButtonFormField(
                                   icon: const Icon(Icons.arrow_drop_down,
                                       color: Colors.black),
@@ -426,7 +428,7 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                                   hint: const Text(
                                     'تحديد التصنيف',
                                     style: TextStyle(
-                                        fontSize: 17,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w800),
                                   ),
                                   items: category.map((e) {
@@ -566,7 +568,17 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                       await fetchData();
                       EasyLoading.dismiss();
                       EasyLoading.showSuccess("تم اضافة التصنيف بنجاح");
+                      //create
                       createController.text = '';
+                      //update
+                      setState(() {
+                        selectedCategoryU = null;
+                      });
+                      updateController.clear();
+                      //delete
+                      setState(() {
+                        selectedCategoryD = null;
+                      });
                       _autovalidateMode = AutovalidateMode.disabled;
                     },
                   ),
@@ -622,10 +634,17 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                       await fetchData();
                       EasyLoading.dismiss();
                       EasyLoading.showSuccess("تم تحديث التصنيف بنجاح");
+                      //create
+                      createController.text = '';
+                      //update
                       setState(() {
                         selectedCategoryU = null;
                       });
                       updateController.clear();
+                      //delete
+                      setState(() {
+                        selectedCategoryD = null;
+                      });
 
                       _autovalidateMode2 = AutovalidateMode.disabled;
                     },
@@ -680,6 +699,14 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                       await fetchData();
                       EasyLoading.dismiss();
                       EasyLoading.showSuccess("تم حذف التصنيف بنجاح");
+                      //create
+                      createController.text = '';
+                      //update
+                      setState(() {
+                        selectedCategoryU = null;
+                      });
+                      updateController.clear();
+                      //delete
                       setState(() {
                         selectedCategoryD = null;
                       });

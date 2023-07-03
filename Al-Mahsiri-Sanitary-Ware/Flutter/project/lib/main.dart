@@ -934,7 +934,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         .only(
                                                                     right: 10),
                                                             child: Text(
-                                                              "${product.finalPrice.toStringAsFixed(2)} د.أ",
+                                                              "${product.price.toStringAsFixed(2)} د.أ",
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight

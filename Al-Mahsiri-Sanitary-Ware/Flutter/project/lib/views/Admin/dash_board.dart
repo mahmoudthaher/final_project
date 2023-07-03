@@ -10,6 +10,7 @@ import 'package:project/views/Admin/categories_page.dart';
 import 'package:project/views/Admin/create_subAdmin.dart';
 import 'package:project/views/Admin/delete_subadmin.dart';
 import 'package:project/views/Admin/delete_users.dart';
+import 'package:project/views/Admin/design_product_page.dart';
 import 'package:project/views/Admin/order.dart';
 import 'package:project/views/Admin/product_page.dart';
 import 'package:project/views/profile_page_basic.dart';
@@ -219,6 +220,7 @@ class _BottomNavigationAdminState extends State<BottomNavigationAdmin> {
     const OrdersPage(),
     const CategoriesAdmin(),
     const ProductAdmin(),
+    const DesignProductsPage(),
     const ProfilePageBasic(),
   ];
   int currentIndex = 0;
@@ -378,6 +380,12 @@ class _BottomNavigationAdminState extends State<BottomNavigationAdmin> {
                         Icons.shopping_bag_rounded,
                       ),
                       label: "المنتجات",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(
+                        Icons.data_saver_off_outlined,
+                      ),
+                      label: "عرض",
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(
