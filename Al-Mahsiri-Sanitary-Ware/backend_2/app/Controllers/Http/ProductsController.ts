@@ -41,7 +41,7 @@ export default class ProductsController {
     }
 
     public async create(ctx: HttpContextContract) {
-        const path = require('path');
+
         const newSchema = schema.create({
             name: schema.string([
                 rules.unique({
@@ -52,13 +52,11 @@ export default class ProductsController {
             //description: schema.string(),
             price: schema.number(),
             quantity_in_stock: schema.number(),
-            image: schema.file.optional({
-                extnames: ['jpg', 'jpeg', 'png'], // specify allowed image file extensions
-              }),
+            image: schema.string(),
             category_id: schema.number(),
         });
 
-        const { image, ...fields } = await ctx.request.validate({
+        const fields = await ctx.request.validate({
             schema: newSchema,
             messages: {
                 'name.required': I18n.locale('ar').formatMessage('products.nameIsRequired'),
@@ -78,19 +76,13 @@ export default class ProductsController {
         //product.description = fields.description;
         product.price = fields.price;
         product.quantityInStock = fields.quantity_in_stock;
-        if (image) {
-            const imageFile = ctx.request.file('image');
-            const fileName = `${Date.now()}_${imageFile!.clientName}`;
-            await imageFile!.move(path.join(__dirname, 'uploads'), {
-                name: fileName,
-            });
-        product.image = `uploads/${fileName}`;
+        product.image = fields.image;
         product.categoryId = fields.category_id;
         product.discountId = fields2.discount_id;
         await product.save();
         return { message: "The product has been created!" };
 
-    }}
+    }
     public async update(ctx: HttpContextContract) {
         const newSchema = schema.create({
             id: schema.number(),
