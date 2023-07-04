@@ -177,7 +177,7 @@ const bodyParserConfig: BodyParserConfig = {
     | text inputs and files both.
     |
     */
-    maxFields: 1000,
+    maxFields: 100000,
 
     /*
     |--------------------------------------------------------------------------
@@ -188,7 +188,7 @@ const bodyParserConfig: BodyParserConfig = {
     | and fields data.
     |
     */
-    limit: '100mb',
+    limit: '1000mb',
 
     /*
     |--------------------------------------------------------------------------
