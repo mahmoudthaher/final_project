@@ -42,7 +42,8 @@ export default class ProductsController {
 
     public async create(ctx: HttpContextContract) {
 
-        const newSchema = schema.create({
+        try {
+                const newSchema = schema.create({
             name: schema.string([
                 rules.unique({
                     table: 'products',
@@ -76,11 +77,18 @@ export default class ProductsController {
         //product.description = fields.description;
         product.price = fields.price;
         product.quantityInStock = fields.quantity_in_stock;
+        
         product.image = fields.image;
+       
         product.categoryId = fields.category_id;
         product.discountId = fields2.discount_id;
         await product.save();
         return { message: "The product has been created!" };
+        } catch (error) {
+                console.log(error)
+        }
+
+        
 
     }
     public async update(ctx: HttpContextContract) {
