@@ -43,53 +43,45 @@ export default class ProductsController {
     public async create(ctx: HttpContextContract) {
 
         try {
-                const newSchema = schema.create({
-            name: schema.string([
-                rules.unique({
-                    table: 'products',
-                    column: 'name',
-                })
-            ]),
-            //description: schema.string(),
-            price: schema.number(),
-            quantity_in_stock: schema.number(),
-            image: schema.string(),
-            category_id: schema.number(),
-        });
+            const newSchema = schema.create({
+                name: schema.string([
+                    rules.unique({
+                        table: 'products',
+                        column: 'name',
+                    })
+                ]),
+                price: schema.number(),
+                quantity_in_stock: schema.number(),
+                image: schema.string(),
+                category_id: schema.number(),
+            });
 
-        const fields = await ctx.request.validate({
-            schema: newSchema,
-            messages: {
-                'name.required': I18n.locale('ar').formatMessage('products.nameIsRequired'),
-                'name.unique': I18n.locale('ar').formatMessage('products.name.unique'),
-                //'description.required': I18n.locale('ar').formatMessage('products.descriptionIsRequired'),
-                'price.required': I18n.locale('ar').formatMessage('products.priceIsRequired'),
-                'price.number': I18n.locale('ar').formatMessage('products.price.number'),
-                'quantity_in_stock.required': I18n.locale('ar').formatMessage('products.quantityInStockIsRequired'),
-                'quantity_in_stock.number': I18n.locale('ar').formatMessage('products.quantityInStock.number'),
-                'image.required': I18n.locale('ar').formatMessage('products.imageIsRequired'),
-                'category_id.required': I18n.locale('ar').formatMessage('products.categoryIdIsRequired'),
-            }
-        });
-        const fields2 = ctx.request.all();
-        var product = new Product();
-        product.name = fields.name;
-        //product.description = fields.description;
-        product.price = fields.price;
-        product.quantityInStock = fields.quantity_in_stock;
-        
-        product.image = fields.image;
-       
-        product.categoryId = fields.category_id;
-        product.discountId = fields2.discount_id;
-        await product.save();
-        return { message: "The product has been created!" };
+            const fields = await ctx.request.validate({
+                schema: newSchema,
+                messages: {
+                    'name.required': I18n.locale('ar').formatMessage('products.nameIsRequired'),
+                    'name.unique': I18n.locale('ar').formatMessage('products.name.unique'),
+                    'price.required': I18n.locale('ar').formatMessage('products.priceIsRequired'),
+                    'price.number': I18n.locale('ar').formatMessage('products.price.number'),
+                    'quantity_in_stock.required': I18n.locale('ar').formatMessage('products.quantityInStockIsRequired'),
+                    'quantity_in_stock.number': I18n.locale('ar').formatMessage('products.quantityInStock.number'),
+                    'image.required': I18n.locale('ar').formatMessage('products.imageIsRequired'),
+                    'category_id.required': I18n.locale('ar').formatMessage('products.categoryIdIsRequired'),
+                }
+            });
+            const fields2 = ctx.request.all();
+            var product = new Product();
+            product.name = fields.name;
+            product.price = fields.price;
+            product.quantityInStock = fields.quantity_in_stock;
+            product.image = fields.image;
+            product.categoryId = fields.category_id;
+            product.discountId = fields2.discount_id;
+            await product.save();
+            return { message: "The product has been created!" };
         } catch (error) {
-                console.log(error)
+            console.log(error)
         }
-
-        
-
     }
     public async update(ctx: HttpContextContract) {
         const newSchema = schema.create({
@@ -100,7 +92,7 @@ export default class ProductsController {
             quantity_in_stock: schema.number(),
             image: schema.string(),
             category_id: schema.number(),
-           
+
         });
 
         const fields = await ctx.request.validate({
@@ -132,7 +124,7 @@ export default class ProductsController {
             product.quantityInStock = fields.quantity_in_stock;
             product.image = fields.image;
             product.categoryId = fields.category_id;
-           
+
             await product.save();
             return { message: "The product has been updated!" };
         } catch (error) {
@@ -147,12 +139,12 @@ export default class ProductsController {
     }
     public async checkProduct(ctx: HttpContextContract) {
         var product = decodeURIComponent(ctx.params.name);
-        var result = Product.query().select('name').where('name',product);
+        var result = Product.query().select('name').where('name', product);
         return result;
     }
     public async getById(ctx: HttpContextContract) {
         var id = ctx.params.id;
-        var result = await  Product.findOrFail(id);
+        var result = await Product.findOrFail(id);
         return result;
     }
 }

@@ -13,7 +13,7 @@ export default class OrdersController {
     }
     public async getById(ctx: HttpContextContract) {
         var userId = ctx.params.userId;
-        var result = await Order.query().preload('status').preload('user').where('user_id',userId).orderBy('id',"desc");
+        var result = await Order.query().preload('status').preload('user').where('user_id',userId).orderBy('created_at',"desc");
         return result;
     }
     
