@@ -8,7 +8,7 @@ export default class OrdersController {
     public async getAll(ctx: HttpContextContract) {
         const token = await ctx.auth.authenticate();
         
-        var result =await Order.query().where("status_id",1).orderBy('id',"asc");
+        var result =await Order.query().where("status_id",1).orderBy('created_at',"asc");
             return result
     }
     public async getById(ctx: HttpContextContract) {
