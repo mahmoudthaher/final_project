@@ -24,7 +24,7 @@ class CategoryController {
     }
   }
 
-  void create(CategoryModel category) async {
+  Future<void> create(CategoryModel category) async {
     try {
       await ApiHelper().postRequest("api/Categories", category.toJson());
     } catch (ex) {
@@ -32,7 +32,7 @@ class CategoryController {
     }
   }
 
-  void delete(int id) async {
+  Future<void> delete(int id) async {
     try {
       await ApiHelper().deleteRequest(
         "api/Categories/$id",
@@ -42,7 +42,7 @@ class CategoryController {
     }
   }
 
-  void update(CategoryModel category) async {
+  Future<void> update(CategoryModel category) async {
     try {
       await ApiHelper().putRequest("api/Categories", category.toJsonU());
     } catch (ex) {

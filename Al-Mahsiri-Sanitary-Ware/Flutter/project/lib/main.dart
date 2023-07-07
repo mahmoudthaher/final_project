@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures, use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -159,8 +161,8 @@ class _LogoPageState extends State<LogoPage> {
 
   int? typeId;
   Future<void> checkType() async {
+    // await FlutterSecureStorage().deleteAll();
     if (await const FlutterSecureStorage().containsKey(key: 'token')) {
-      // await FlutterSecureStorage().deleteAll();
       String? type = await FlutterSecureStorage().read(key: 'typeId');
 
       if (int.parse(type!) == 2) {
@@ -645,24 +647,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children:
-                            //       List.generate(imageUrls.length, (index) {
-                            //     return Container(
-                            //       width: 15,
-                            //       height: 5,
-                            //       margin:
-                            //           const EdgeInsets.symmetric(horizontal: 4),
-                            //       decoration: BoxDecoration(
-                            //         shape: BoxShape.rectangle,
-                            //         color: _currentPageIndex == index
-                            //             ? Colors.blue
-                            //             : Colors.grey,
-                            //       ),
-                            //     );
-                            //   }),
-                            // ),
                             const SizedBox(
                               height: 20,
                             ),
@@ -714,23 +698,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children:
-                            //       List.generate(imageUrls2.length, (index) {
-                            //     return Container(
-                            //       width: 15,
-                            //       height: 5,
-                            //       margin: EdgeInsets.symmetric(horizontal: 4),
-                            //       decoration: BoxDecoration(
-                            //         shape: BoxShape.rectangle,
-                            //         color: _currentPageIndex2 == index
-                            //             ? Colors.blue
-                            //             : Colors.grey,
-                            //       ),
-                            //     );
-                            //   }),
-                            // ),
                             Padding(
                               padding:
                                   const EdgeInsets.only(right: 20, top: 10),

@@ -65,7 +65,7 @@ class _MyOrederPageState extends State<MyOrederPage> {
                           itemBuilder: (context, index) {
                             OrderModel order = orders[index];
                             return SizedBox(
-                              height: 95,
+                              height: 120,
                               child: InkWell(
                                 child: Card(
                                   child: ListTile(
@@ -83,17 +83,20 @@ class _MyOrederPageState extends State<MyOrederPage> {
                                         ],
                                       ),
                                     ),
-                                    title: Text(
-                                      "المجموع : ${order.total.toStringAsFixed(2)}",
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
+                                    title: Padding(
+                                      padding: const EdgeInsets.only(top: 18.0),
+                                      child: Text(
+                                        "المجموع : ${order.total.toStringAsFixed(2)}",
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
                                     ),
                                     subtitle: Text(
                                       "المجموع بدون الضريبة : ${order.subTotal.toStringAsFixed(2)}",
                                       style: const TextStyle(fontSize: 13),
                                     ),
-                                    trailing: Column(
+                                    trailing: Wrap(
                                       children: [
                                         SizedBox(
                                             width: 120,

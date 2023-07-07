@@ -563,23 +563,25 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                     ),
                     onTap: () async {
                       CategoryController()
-                          .create(CategoryModel(category: _create));
-                      Navigator.pop(context);
-                      await fetchData();
-                      EasyLoading.dismiss();
-                      EasyLoading.showSuccess("تم اضافة التصنيف بنجاح");
-                      //create
-                      createController.text = '';
-                      //update
-                      setState(() {
-                        selectedCategoryU = null;
+                          .create(CategoryModel(category: _create))
+                          .then((value) {
+                        Navigator.pop(context);
+                        fetchData();
+                        EasyLoading.dismiss();
+                        EasyLoading.showSuccess("تم اضافة التصنيف بنجاح");
+                        //create
+                        createController.text = '';
+                        //update
+                        setState(() {
+                          selectedCategoryU = null;
+                        });
+                        updateController.clear();
+                        //delete
+                        setState(() {
+                          selectedCategoryD = null;
+                        });
+                        _autovalidateMode = AutovalidateMode.disabled;
                       });
-                      updateController.clear();
-                      //delete
-                      setState(() {
-                        selectedCategoryD = null;
-                      });
-                      _autovalidateMode = AutovalidateMode.disabled;
                     },
                   ),
                 ],
@@ -627,26 +629,28 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
                     ),
                     onTap: () async {
-                      CategoryController().update(CategoryModel(
-                          id: selectedCategoryU!, category: update));
+                      CategoryController()
+                          .update(CategoryModel(
+                              id: selectedCategoryU!, category: update))
+                          .then((value) {
+                        Navigator.pop(context);
+                        fetchData();
+                        EasyLoading.dismiss();
+                        EasyLoading.showSuccess("تم تحديث التصنيف بنجاح");
+                        //create
+                        createController.text = '';
+                        //update
+                        setState(() {
+                          selectedCategoryU = null;
+                        });
+                        updateController.clear();
+                        //delete
+                        setState(() {
+                          selectedCategoryD = null;
+                        });
 
-                      Navigator.pop(context);
-                      await fetchData();
-                      EasyLoading.dismiss();
-                      EasyLoading.showSuccess("تم تحديث التصنيف بنجاح");
-                      //create
-                      createController.text = '';
-                      //update
-                      setState(() {
-                        selectedCategoryU = null;
+                        _autovalidateMode2 = AutovalidateMode.disabled;
                       });
-                      updateController.clear();
-                      //delete
-                      setState(() {
-                        selectedCategoryD = null;
-                      });
-
-                      _autovalidateMode2 = AutovalidateMode.disabled;
                     },
                   ),
                 ],
@@ -694,23 +698,26 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
                     ),
                     onTap: () async {
-                      CategoryController().delete(selectedCategoryD!);
-                      Navigator.pop(context);
-                      await fetchData();
-                      EasyLoading.dismiss();
-                      EasyLoading.showSuccess("تم حذف التصنيف بنجاح");
-                      //create
-                      createController.text = '';
-                      //update
-                      setState(() {
-                        selectedCategoryU = null;
+                      CategoryController()
+                          .delete(selectedCategoryD!)
+                          .then((value) {
+                        Navigator.pop(context);
+                        fetchData();
+                        EasyLoading.dismiss();
+                        EasyLoading.showSuccess("تم حذف التصنيف بنجاح");
+                        //create
+                        createController.text = '';
+                        //update
+                        setState(() {
+                          selectedCategoryU = null;
+                        });
+                        updateController.clear();
+                        //delete
+                        setState(() {
+                          selectedCategoryD = null;
+                        });
+                        _autovalidateMode3 = AutovalidateMode.disabled;
                       });
-                      updateController.clear();
-                      //delete
-                      setState(() {
-                        selectedCategoryD = null;
-                      });
-                      _autovalidateMode3 = AutovalidateMode.disabled;
                     },
                   ),
                 ],
@@ -735,27 +742,35 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
 
   int checkcategory = 0;
   Future<void> checkCategory() async {
-    final category = createController.text;
-    dynamic json =
-        await ApiHelper().getRequest2("api/Categories/category/$category");
-    final count = json.isEmpty ? 0 : 1;
-    if (mounted) {
-      setState(() {
-        checkcategory = count;
-      });
+    try {
+      final category = createController.text;
+      dynamic json =
+          await ApiHelper().getRequest2("api/Categories/category/$category");
+      final count = json.isEmpty ? 0 : 1;
+      if (mounted) {
+        setState(() {
+          checkcategory = count;
+        });
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
   int checkcategory2 = 0;
   Future<void> checkCategory2() async {
-    final category = updateController.text;
-    dynamic json =
-        await ApiHelper().getRequest2("api/Categories/category/$category");
-    final count = json.isEmpty ? 0 : 1;
-    if (mounted) {
-      setState(() {
-        checkcategory2 = count;
-      });
+    try {
+      final category = updateController.text;
+      dynamic json =
+          await ApiHelper().getRequest2("api/Categories/category/$category");
+      final count = json.isEmpty ? 0 : 1;
+      if (mounted) {
+        setState(() {
+          checkcategory2 = count;
+        });
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }

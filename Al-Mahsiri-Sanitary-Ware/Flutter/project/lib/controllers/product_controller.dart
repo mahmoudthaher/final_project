@@ -41,17 +41,23 @@ class ProductController {
     }
   }
 
-  Future<ProductModel> create(ProductModel product) async {
+  Future<void> create(ProductModel product) async {
     try {
-      dynamic jsonObject =
-          await ApiHelper().postRequest("api/Products", product.toJsonC());
-      return ProductModel.fromJson(jsonObject);
+      await ApiHelper().postRequest("api/Products", product.toJsonC());
     } catch (ex) {
       rethrow;
     }
   }
 
-  void delete(int id) async {
+  Future<void> update(ProductModel product) async {
+    try {
+      await ApiHelper().putRequest("api/Products", product.toJsonU());
+    } catch (ex) {
+      rethrow;
+    }
+  }
+
+  Future<void> delete(int id) async {
     try {
       await ApiHelper().deleteRequest(
         "api/Products/$id",
@@ -67,14 +73,6 @@ class ProductController {
           await ApiHelper().getRequest2("api/Products/productID/$id");
 
       return ProductModel.fromJson(jsonObject);
-    } catch (ex) {
-      rethrow;
-    }
-  }
-
-  void update(ProductModel product) async {
-    try {
-      await ApiHelper().putRequest("api/Products", product.toJsonU());
     } catch (ex) {
       rethrow;
     }

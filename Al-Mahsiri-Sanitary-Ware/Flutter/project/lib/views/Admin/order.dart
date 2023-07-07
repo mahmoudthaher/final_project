@@ -40,19 +40,17 @@ class _OrdersPageState extends State<OrdersPage> {
       child: Scaffold(
           backgroundColor: Colors.transparent,
           body: _currentPage is OrdersPage
-              ? _isLoading
-                  ? orders.isEmpty
-                      ? Container(
-                          margin: EdgeInsets.only(bottom: 75),
-                          child: const Center(
-                            child: Text(
-                              "لا يوجد طلبات جديدة",
-                              style: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                        )
-                      : Container() //
+              ? orders.isEmpty
+                  ? Container(
+                      margin: EdgeInsets.only(bottom: 75),
+                      child: const Center(
+                        child: Text(
+                          "لا يوجد طلبات جديدة",
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    )
                   : ListView.builder(
                       itemCount: orders.length,
                       itemBuilder: (context, index) {
@@ -179,7 +177,7 @@ class _OrdersPageState extends State<OrdersPage> {
                     child: const Text(
                       'رجوع',
                       style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                     ),
                     onTap: () {
                       Navigator.pop(context);
@@ -238,7 +236,7 @@ class _OrdersPageState extends State<OrdersPage> {
                     child: const Text(
                       'رجوع',
                       style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                     ),
                     onTap: () {
                       Navigator.pop(context);

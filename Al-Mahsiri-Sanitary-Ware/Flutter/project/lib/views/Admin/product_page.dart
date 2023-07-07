@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:project/Providers/category_provider.dart';
@@ -294,7 +295,7 @@ class _ProductAdminState extends State<ProductAdmin> {
                             height: 100,
                             child: TextFormField(
                               controller: imageontroller,
-                              maxLength: 15,
+                              //   maxLength: 15,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               style: const TextStyle(
@@ -341,11 +342,29 @@ class _ProductAdminState extends State<ProductAdmin> {
                               },
                               onChanged: (value) {
                                 setState(() {
-                                  image = imageontroller.text;
+                                  image = value;
                                 });
                               },
                             ),
                           ),
+                          image != null
+                              ? SizedBox(
+                                  height: 100,
+                                  child: CachedNetworkImage(
+                                      imageUrl: image!,
+                                      placeholder: (context, url) => const Align(
+                                          alignment: Alignment.center,
+                                          child: SizedBox(
+                                              width: 70,
+                                              height: 70,
+                                              child:
+                                                  CircularProgressIndicator())),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(
+                                            Icons.error,
+                                            size: 50,
+                                          )))
+                              : Container(),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(40),
@@ -588,79 +607,80 @@ class _ProductAdminState extends State<ProductAdmin> {
                                 color: Colors.black,
                               ),
                             ),
-                            child: SizedBox(
-                              height: 60,
-                              child: DropdownButtonFormField(
-                                icon: const Icon(Icons.arrow_drop_down,
-                                    color: Colors.black),
-                                decoration: const InputDecoration(
-                                  errorStyle: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w700),
-                                  border: InputBorder.none,
-                                ),
-                                value: selectedCategoryU,
-                                hint: const Padding(
-                                  padding: EdgeInsets.only(right: 25),
-                                  child: Text(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10, right: 25),
+                              child: SizedBox(
+                                height: 60,
+                                child: DropdownButtonFormField(
+                                  icon: const Icon(Icons.arrow_drop_down,
+                                      color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    errorStyle: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.w700),
+                                    border: InputBorder.none,
+                                  ),
+                                  value: selectedCategoryU,
+                                  hint: Text(
                                     'تحديد المنتج',
                                     style: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.w800),
                                   ),
-                                ),
-                                items: product.map((e) {
-                                  return DropdownMenuItem(
-                                    value: e.id,
-                                    child: Text(
-                                      e.name,
-                                      style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600,
-                                          height: 1.0),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  if (mounted) {
-                                    setState(() {
-                                      selectedCategoryU = value;
+                                  items: product.map((e) {
+                                    return DropdownMenuItem(
+                                      value: e.id,
+                                      child: Text(
+                                        e.name,
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600,
+                                            height: 1.0),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    if (mounted) {
+                                      setState(() {
+                                        selectedCategoryU = value;
 
-                                      ProductController()
-                                          .getProductsById(selectedCategoryU!)
-                                          .then((value) {
-                                        setState(() {
-                                          product2 = value;
+                                        ProductController()
+                                            .getProductsById(selectedCategoryU!)
+                                            .then((value) {
+                                          setState(() {
+                                            product2 = value;
+                                          });
+                                        }).then((value) {
+                                          uniqueNameUpdate = product2!.name;
+                                          nameController2.text = product2!.name;
+                                          priceController2.text =
+                                              product2!.price.toString();
+                                          quantityInSstockController2.text =
+                                              product2!.quantityInStock
+                                                  .toString();
+                                          imageontroller2.text =
+                                              product2!.image;
+                                          selectedCategoryU2 =
+                                              product2!.categoryId;
                                         });
-                                      }).then((value) {
-                                        uniqueNameUpdate = product2!.name;
-                                        nameController2.text = product2!.name;
-                                        priceController2.text =
-                                            product2!.price.toString();
-                                        quantityInSstockController2.text =
-                                            product2!.quantityInStock
-                                                .toString();
-                                        imageontroller2.text = product2!.image;
-                                        selectedCategoryU2 =
-                                            product2!.categoryId;
                                       });
-                                    });
-                                  }
-                                },
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                validator: (value) {
-                                  if (value == null) {
-                                    if (_autovalidateMode2 ==
-                                        AutovalidateMode.always) {
-                                      return 'الرجاء ادخال المنتج';
                                     }
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  categorynameU = value.toString();
-                                },
+                                  },
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  validator: (value) {
+                                    if (value == null) {
+                                      if (_autovalidateMode2 ==
+                                          AutovalidateMode.always) {
+                                        return 'الرجاء ادخال المنتج';
+                                      }
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    categorynameU = value.toString();
+                                  },
+                                ),
                               ),
                             ),
                           ),
@@ -858,7 +878,6 @@ class _ProductAdminState extends State<ProductAdmin> {
                             height: 100,
                             child: TextFormField(
                               controller: imageontroller2,
-                              maxLength: 15,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               style: const TextStyle(
@@ -905,11 +924,29 @@ class _ProductAdminState extends State<ProductAdmin> {
                               },
                               onChanged: (value) {
                                 setState(() {
-                                  image2 = imageontroller2.text;
+                                  image2 = value;
                                 });
                               },
                             ),
                           ),
+                          image2 != null
+                              ? SizedBox(
+                                  height: 100,
+                                  child: CachedNetworkImage(
+                                      imageUrl: image2!,
+                                      placeholder: (context, url) => const Align(
+                                          alignment: Alignment.center,
+                                          child: SizedBox(
+                                              width: 70,
+                                              height: 70,
+                                              child:
+                                                  CircularProgressIndicator())),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(
+                                            Icons.error,
+                                            size: 50,
+                                          )))
+                              : Container(),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(40),
@@ -1147,61 +1184,61 @@ class _ProductAdminState extends State<ProductAdmin> {
                                 color: Colors.black,
                               ),
                             ),
-                            child: SizedBox(
-                              height: 60,
-                              child: DropdownButtonFormField(
-                                icon: const Icon(Icons.arrow_drop_down,
-                                    color: Colors.black),
-                                decoration: const InputDecoration(
-                                  errorStyle: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w700),
-                                  border: InputBorder.none,
-                                ),
-                                value: selectedCategoryD,
-                                hint: const Padding(
-                                  padding: EdgeInsets.only(left: 10, right: 25),
-                                  child: Text(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10, right: 25),
+                              child: SizedBox(
+                                height: 60,
+                                child: DropdownButtonFormField(
+                                  icon: const Icon(Icons.arrow_drop_down,
+                                      color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    errorStyle: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.w700),
+                                    border: InputBorder.none,
+                                  ),
+                                  value: selectedCategoryD,
+                                  hint: Text(
                                     'تحديد المنتج',
                                     style: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.w800),
                                   ),
-                                ),
-                                items: product3.map((e) {
-                                  return DropdownMenuItem(
-                                    value: e.id,
-                                    child: Text(
-                                      e.name,
-                                      style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600,
-                                          height: 1.0),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  if (mounted) {
-                                    setState(() {
-                                      selectedCategoryD = value;
-                                    });
-                                  }
-                                },
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                validator: (value) {
-                                  if (value == null) {
-                                    if (_autovalidateMode3 ==
-                                        AutovalidateMode.always) {
-                                      return 'الرجاء ادخال المنتج';
+                                  items: product3.map((e) {
+                                    return DropdownMenuItem(
+                                      value: e.id,
+                                      child: Text(
+                                        e.name,
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600,
+                                            height: 1.0),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    if (mounted) {
+                                      setState(() {
+                                        selectedCategoryD = value;
+                                      });
                                     }
-                                  }
+                                  },
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  validator: (value) {
+                                    if (value == null) {
+                                      if (_autovalidateMode3 ==
+                                          AutovalidateMode.always) {
+                                        return 'الرجاء ادخال المنتج';
+                                      }
+                                    }
 
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  categorynameD = value.toString();
-                                },
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    categorynameD = value.toString();
+                                  },
+                                ),
                               ),
                             ),
                           ),
@@ -1299,38 +1336,41 @@ class _ProductAdminState extends State<ProductAdmin> {
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
                     ),
                     onTap: () async {
-                      ProductController().create(ProductModel(
-                          name: name!,
-                          price: price!,
-                          quantityInStock: quantityInSstock!,
-                          image: image!,
-                          categoryId: selectedCategoryC!));
-                      Navigator.pop(context);
-                      await fetchData();
-                      EasyLoading.dismiss();
-                      EasyLoading.showSuccess("تم اضافة المنتج بنجاح");
+                      ProductController()
+                          .create(ProductModel(
+                              name: name!,
+                              price: price!,
+                              quantityInStock: quantityInSstock!,
+                              image: image!,
+                              categoryId: selectedCategoryC!))
+                          .then((value) {
+                        Navigator.pop(context);
+                        fetchData();
+                        EasyLoading.dismiss();
+                        EasyLoading.showSuccess("تم اضافة المنتج بنجاح");
 
-                      nameController.text = "";
-                      priceController.text = "";
-                      quantityInSstockController.text = "";
-                      imageontroller.text = "";
-                      setState(() {
-                        selectedCategoryC = null;
+                        nameController.text = "";
+                        priceController.text = "";
+                        quantityInSstockController.text = "";
+                        imageontroller.text = "";
+                        setState(() {
+                          selectedCategoryC = null;
+                        });
+                        //update
+                        nameController2.text = "";
+                        priceController2.text = "";
+                        quantityInSstockController2.text = "";
+                        imageontroller2.text = "";
+                        setState(() {
+                          selectedCategoryU = null;
+                          selectedCategoryU2 = null;
+                        });
+                        //delete
+                        setState(() {
+                          selectedCategoryD = null;
+                        });
+                        _autovalidateMode = AutovalidateMode.disabled;
                       });
-                      //update
-                      nameController2.text = "";
-                      priceController2.text = "";
-                      quantityInSstockController2.text = "";
-                      imageontroller2.text = "";
-                      setState(() {
-                        selectedCategoryU = null;
-                        selectedCategoryU2 = null;
-                      });
-                      //delete
-                      setState(() {
-                        selectedCategoryD = null;
-                      });
-                      _autovalidateMode = AutovalidateMode.disabled;
                     },
                   ),
                 ],
@@ -1378,39 +1418,42 @@ class _ProductAdminState extends State<ProductAdmin> {
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
                     ),
                     onTap: () async {
-                      ProductController().update(ProductModel(
-                          id: selectedCategoryU!,
-                          name: nameController2.text,
-                          price: double.parse(priceController2.text),
-                          quantityInStock:
-                              int.parse(quantityInSstockController2.text),
-                          image: imageontroller2.text,
-                          categoryId: selectedCategoryU2!));
-                      Navigator.pop(context);
-                      await fetchData();
-                      EasyLoading.dismiss();
-                      EasyLoading.showSuccess("تم تحديث التصنيف بنجاح");
-                      nameController.text = "";
-                      priceController.text = "";
-                      quantityInSstockController.text = "";
-                      imageontroller.text = "";
-                      setState(() {
-                        selectedCategoryC = null;
+                      ProductController()
+                          .update(ProductModel(
+                              id: selectedCategoryU!,
+                              name: nameController2.text,
+                              price: double.parse(priceController2.text),
+                              quantityInStock:
+                                  int.parse(quantityInSstockController2.text),
+                              image: imageontroller2.text,
+                              categoryId: selectedCategoryU2!))
+                          .then((value) {
+                        Navigator.pop(context);
+                        fetchData();
+                        EasyLoading.dismiss();
+                        EasyLoading.showSuccess("تم تحديث التصنيف بنجاح");
+                        nameController.text = "";
+                        priceController.text = "";
+                        quantityInSstockController.text = "";
+                        imageontroller.text = "";
+                        setState(() {
+                          selectedCategoryC = null;
+                        });
+                        //update
+                        nameController2.text = "";
+                        priceController2.text = "";
+                        quantityInSstockController2.text = "";
+                        imageontroller2.text = "";
+                        setState(() {
+                          selectedCategoryU = null;
+                          selectedCategoryU2 = null;
+                        });
+                        //delete
+                        setState(() {
+                          selectedCategoryD = null;
+                        });
+                        _autovalidateMode2 = AutovalidateMode.disabled;
                       });
-                      //update
-                      nameController2.text = "";
-                      priceController2.text = "";
-                      quantityInSstockController2.text = "";
-                      imageontroller2.text = "";
-                      setState(() {
-                        selectedCategoryU = null;
-                        selectedCategoryU2 = null;
-                      });
-                      //delete
-                      setState(() {
-                        selectedCategoryD = null;
-                      });
-                      _autovalidateMode2 = AutovalidateMode.disabled;
                     },
                   ),
                 ],
@@ -1458,32 +1501,35 @@ class _ProductAdminState extends State<ProductAdmin> {
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
                     ),
                     onTap: () async {
-                      ProductController().delete(selectedCategoryD!);
-                      Navigator.pop(context);
-                      await fetchData();
-                      EasyLoading.dismiss();
-                      EasyLoading.showSuccess("تم حذف المنتج بنجاح");
-                      nameController.text = "";
-                      priceController.text = "";
-                      quantityInSstockController.text = "";
-                      imageontroller.text = "";
-                      setState(() {
-                        selectedCategoryC = null;
+                      ProductController()
+                          .delete(selectedCategoryD!)
+                          .then((value) {
+                        Navigator.pop(context);
+                        fetchData();
+                        EasyLoading.dismiss();
+                        EasyLoading.showSuccess("تم حذف المنتج بنجاح");
+                        nameController.text = "";
+                        priceController.text = "";
+                        quantityInSstockController.text = "";
+                        imageontroller.text = "";
+                        setState(() {
+                          selectedCategoryC = null;
+                        });
+                        //update
+                        nameController2.text = "";
+                        priceController2.text = "";
+                        quantityInSstockController2.text = "";
+                        imageontroller2.text = "";
+                        setState(() {
+                          selectedCategoryU = null;
+                          selectedCategoryU2 = null;
+                        });
+                        //delete
+                        setState(() {
+                          selectedCategoryD = null;
+                        });
+                        _autovalidateMode3 = AutovalidateMode.disabled;
                       });
-                      //update
-                      nameController2.text = "";
-                      priceController2.text = "";
-                      quantityInSstockController2.text = "";
-                      imageontroller2.text = "";
-                      setState(() {
-                        selectedCategoryU = null;
-                        selectedCategoryU2 = null;
-                      });
-                      //delete
-                      setState(() {
-                        selectedCategoryD = null;
-                      });
-                      _autovalidateMode3 = AutovalidateMode.disabled;
                     },
                   ),
                 ],
