@@ -8,6 +8,17 @@ import Database from '@ioc:Adonis/Lucid/Database';
 import Order from 'App/Models/Order';
 import OrderAddress from 'App/Models/OrderAddress';
 import OrderProduct from 'App/Models/OrderProduct';
+import Firebase from 'App/Models/Firebase';
+import { DateTime } from 'luxon';
+import admin, { ServiceAccount } from 'firebase-admin';
+
+
+// import Firestore from 'App/Models/Firestore';
+
+
+
+
+
 
 //const { firebaseAdmin } = require('firebase-admin');
 
@@ -102,6 +113,10 @@ export default class UsersController {
         return { message: "Logout" }
     }
     public async create(ctx: HttpContextContract) {
+        const firestore = new Firebase;
+        const db = firestore.db();
+        const userReference = db.collection('Users');
+
 
         const newSchema = schema.create({
             fist_name: schema.string(),
@@ -154,6 +169,7 @@ export default class UsersController {
                 'city_id.required': I18n.locale('ar').formatMessage('users.cityIdIsRequired'),
             }
         });
+
         var user = new User();
         user.fistName = fields.fist_name;
         user.lastName = fields.last_name;
@@ -167,8 +183,59 @@ export default class UsersController {
         // user.countryId = fields.country_id;
         user.cityId = fields.city_id;
         await user.save();
-        return { message: "The user has been created!" };
+
+        const id = await User.query().where("email", user.email).firstOrFail();
+
+        if (id) {
+            
+            user.createdAt = DateTime.now();
+            user.updatedAt = DateTime.now();
+      
+            const createdAtTimestamp = admin.firestore.Timestamp.fromMillis(user.createdAt.toMillis());
+            const updatedAtTimestamp = admin.firestore.Timestamp.fromMillis(user.updatedAt.toMillis());
+      
+            const userObject = {
+                id : id.id,
+              fistName: user.fistName,
+              lastName: user.lastName,
+              phoneNumber: user.phoneNumber,
+              email: user.email,
+              userName: user.userName,
+              password: user.password,
+              address: user.address,
+              genderId: user.genderId,
+              typeId: user.typeId,
+              cityId: user.cityId,
+              createdAt: createdAtTimestamp,
+              updatedAt: updatedAtTimestamp
+            };
+      
+            const create = await userReference.add(userObject);
+
+            if (create) {
+                return {
+                    status: true,
+                    message: 'User created successfully',
+                    data: null
+                };
+            } else {
+                // Handle the case when Firestore instance is undefined
+                return {
+                    status: false,
+                    message: 'Failed to create user',
+                    data: null
+                };
+            }
+        } else {
+            // Handle the case when the user does not exist in the database
+            return {
+                status: false,
+                message: 'User not found',
+                data: null
+            };
+        }
     }
+   
     public async update(ctx: HttpContextContract) {
         const newSchema = schema.create({
             id: schema.number(),
@@ -270,33 +337,30 @@ export default class UsersController {
     }
     public async destroy(ctx: HttpContextContract) {
         const id = ctx.params.id;
-      
-        
-      
+
+
+
         const user = await User.findOrFail(id);
-      
+
         const orders = await Order.query().where('user_id', user.id).preload('orderAddress').preload('orderProducts');
-      
+
         for (const order of orders) {
-          for (const orderProduct of order.orderProducts) {
-            await orderProduct.delete();
-          }
-      
-          if (order.orderAddress) {
-            await order.orderAddress.delete();
-          }
-      
-          await order.delete();
+            for (const orderProduct of order.orderProducts) {
+                await orderProduct.delete();
+            }
+
+            if (order.orderAddress) {
+                await order.orderAddress.delete();
+            }
+
+            await order.delete();
         }
-      
-        
-      
+
+
+
         return { message: "The user and associated records have been deleted!" };
-      }
-      
-      
-      
-      
+    }
+
     public async checkEmail(ctx: HttpContextContract) {
         var email = ctx.params.email;
         var result = User.query().select('email').where("email", email);
@@ -345,14 +409,14 @@ export default class UsersController {
         }
     }
     public async getUserByTypeIdSub() {
-        
+
         var result = await User.query().where('type_id', 1);
         return result;
     }
 
     public async getUserByTypeIdBase() {
-        
-        var result = await User.query().where('type_id', 2).whereNot("id",41);
+
+        var result = await User.query().where('type_id', 2).whereNot("id", 41);
         return result;
     }
 

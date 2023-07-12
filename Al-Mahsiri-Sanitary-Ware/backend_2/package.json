@@ -56,12 +56,15 @@
   },
   "dependencies": {
     "@adonisjs/auth": "^8.2.3",
+    "@adonisjs/cli": "^4.0.13",
     "@adonisjs/core": "^5.9.0",
     "@adonisjs/i18n": "^1.5.6",
     "@adonisjs/lucid": "^18.4.0",
     "@adonisjs/mail": "^8.2.0",
     "@adonisjs/repl": "^3.1.11",
     "@adonisjs/view": "^6.2.0",
+    "firebase-admin": "^11.9.0",
+    "kleur": "^4.1.5",
     "luxon": "^3.3.0",
     "mysql2": "^3.2.0",
     "proxy-addr": "^2.0.7",
@@ -69,6 +72,7 @@
     "reflect-metadata": "^0.1.13",
     "scrypt-async": "^2.0.1",
     "scrypt-js": "^3.0.1",
+    "set-value": "^4.1.0",
     "source-map-support": "^0.5.21",
     "swagger-jsdoc": "^6.2.8"
   }
