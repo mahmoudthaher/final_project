@@ -26,6 +26,7 @@ enum SingingCharacter { Male, Female }
 //enum SingingCharacter2 { User, Admin }
 
 class _ProfilePageState extends State<ProfilePage> {
+  bool readOnlay = false;
   final storage = FlutterSecureStorage();
   int typeId = 1;
   bool _isLoggedIn = false;
@@ -84,6 +85,10 @@ class _ProfilePageState extends State<ProfilePage> {
               EasyLoading.dismiss();
               EasyLoading.show(status: "Loading");
               _showUserInfo();
+              setState(() {
+                readOnlay = true;
+              });
+
               EasyLoading.dismiss();
               EasyLoading.showSuccess("تسطيع هنا تحديث معلوماتك");
             }
@@ -293,6 +298,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           width: double.infinity,
                           height: 100,
                           child: TextFormField(
+                            readOnly: readOnlay,
                             controller: emailController,
                             maxLength: 30,
                             autovalidateMode:
