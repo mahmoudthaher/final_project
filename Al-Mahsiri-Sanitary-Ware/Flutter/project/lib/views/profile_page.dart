@@ -861,7 +861,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> checkType() async {
-    if (await const FlutterSecureStorage().containsKey(key: 'token')) {
+    if (await const FlutterSecureStorage().containsKey(key: 'typeId')) {
       String? type = await FlutterSecureStorage().read(key: 'typeId');
       if (int.parse(type!) == 2) {
         setState(() {
@@ -937,7 +937,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   _checkLogin() async {
-    bool hasToken = await storage.containsKey(key: "token");
+    bool hasToken = await storage.containsKey(key: "typeId");
     return hasToken;
   }
 

@@ -36,7 +36,7 @@ class _DashBoardState extends State<DashBoard> {
   }
 
   _checkTypeA() async {
-    if (await const FlutterSecureStorage().containsKey(key: "token")) {
+    if (await const FlutterSecureStorage().containsKey(key: "typeId")) {
       String? id = await const FlutterSecureStorage().read(key: 'id');
 
       setState(() {
@@ -187,7 +187,7 @@ class _DashBoardState extends State<DashBoard> {
   Future<void> showName() async {
     if (_isDisposed) return;
 
-    if (await const FlutterSecureStorage().containsKey(key: 'token')) {
+    if (await const FlutterSecureStorage().containsKey(key: 'typeId')) {
       String? fistName = await FlutterSecureStorage().read(key: 'fistName');
       String? gender = await FlutterSecureStorage().read(key: 'genderId');
       if (int.parse(gender!) == 1) {

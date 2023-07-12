@@ -207,7 +207,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   _handleBeginCheckoutAction(BuildContext context) async {
-    bool exists = await FlutterSecureStorage().containsKey(key: "token");
+    bool exists = await FlutterSecureStorage().containsKey(key: "typeId");
 
     if (exists) {
       _handleGoToOrderCheckout(context);

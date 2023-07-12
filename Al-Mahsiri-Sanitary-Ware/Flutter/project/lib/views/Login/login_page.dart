@@ -20,7 +20,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool checkLogin = false;
   Widget _currentPage = const LoginPage();
   final _keyForm = GlobalKey<FormState>();
   bool obscureText = false;
@@ -229,38 +228,12 @@ class _LoginPageState extends State<LoginPage> {
                                   onTap: () {
                                     setState(() {
                                       if (_keyForm.currentState!.validate()) {
-                                        if (checkLogin == false) {
-                                          try {
-                                            UserController()
-                                                .login(userProvider.login(
-                                                    emailController.text,
-                                                    passwordController.text))
-                                                .then((value) {
-                                              UserController()
-                                                  .informationUser(
-                                                emailController.text,
-                                              )
-                                                  .then((value) {
-                                                checkType().then((value) {
-                                                  EasyLoading.dismiss();
-                                                  EasyLoading.showSuccess(
-                                                      "تم تسجيل الدخول بنجاح");
-                                                });
-                                              }).catchError((ex) {
-                                                print(ex);
-                                              });
-                                            }).catchError((ex) {
-                                              setState(() {
-                                                checkLogin = true;
-                                              });
-                                            });
-                                          } catch (ex) {
-                                            EasyLoading.dismiss();
-                                            EasyLoading.showError(
-                                                ex.toString());
-                                          }
-                                        } else if (checkLogin == true) {
-                                          signin().then((value) {
+                                        try {
+                                          UserController()
+                                              .login(userProvider.login(
+                                                  emailController.text,
+                                                  passwordController.text))
+                                              .then((value) {
                                             UserController()
                                                 .informationUser(
                                               emailController.text,
@@ -272,13 +245,32 @@ class _LoginPageState extends State<LoginPage> {
                                                     "تم تسجيل الدخول بنجاح");
                                               });
                                             }).catchError((ex) {
+                                              print(ex);
+                                            });
+                                          }).catchError((ex) {
+                                            signin().then((value) {
+                                              UserController()
+                                                  .informationUser(
+                                                emailController.text,
+                                              )
+                                                  .then((value) {
+                                                checkType().then((value) {
+                                                  EasyLoading.dismiss();
+                                                  EasyLoading.showSuccess(
+                                                      "تم تسجيل الدخول بنجاح");
+                                                });
+                                              }).catchError((ex) {
+                                                loginController.text =
+                                                    "إسم المستخدم او كلمة المرور غير صحيحة";
+                                              });
+                                            }).catchError((ex) {
                                               loginController.text =
                                                   "إسم المستخدم او كلمة المرور غير صحيحة";
                                             });
-                                          }).catchError((ex) {
-                                            loginController.text =
-                                                "إسم المستخدم او كلمة المرور غير صحيحة";
                                           });
+                                        } catch (ex) {
+                                          EasyLoading.dismiss();
+                                          EasyLoading.showError(ex.toString());
                                         }
                                       }
                                     });
@@ -412,7 +404,7 @@ class _LoginPageState extends State<LoginPage> {
 
   // int? typeId;
   Future<void> checkType() async {
-    if (await const FlutterSecureStorage().containsKey(key: 'token')) {
+    if (await const FlutterSecureStorage().containsKey(key: 'typeId')) {
       String? type = await FlutterSecureStorage().read(key: 'typeId');
 
       if (int.parse(type!) == 1) {

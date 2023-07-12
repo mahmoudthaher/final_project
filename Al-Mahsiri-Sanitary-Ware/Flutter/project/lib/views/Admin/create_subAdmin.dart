@@ -745,7 +745,7 @@ class _CreateSubAdminState extends State<CreateSubAdmin> {
 
   int? typeId;
   Future<void> checkType() async {
-    if (await const FlutterSecureStorage().containsKey(key: 'token')) {
+    if (await const FlutterSecureStorage().containsKey(key: 'typeId')) {
       String? type = await FlutterSecureStorage().read(key: 'typeId');
 
       setState(() {
