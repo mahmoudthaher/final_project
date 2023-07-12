@@ -153,7 +153,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         ),
                       ),
                     ),
-                    // Padding(
+                    //  // Padding(
                     //   padding: const EdgeInsets.symmetric(horizontal: 30),
                     //   child: SizedBox(
                     //     width: double.infinity,
