@@ -93,7 +93,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         child: Row(
                           children: const [
                             Text(
-                              'لإستعادة كلمة المرور يجب عليك كتابة \nالمعلومات التالية بطريقة صحيحة',
+                              'لإستعادة كلمة المرور يجب عليك كتابة \nالبريد الإلكتروني بطريقة صحيحة',
                               maxLines: 2,
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w600),

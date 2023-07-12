@@ -162,7 +162,7 @@ class _LogoPageState extends State<LogoPage> {
   int? typeId;
   Future<void> checkType() async {
     // await FlutterSecureStorage().deleteAll();
-    if (await const FlutterSecureStorage().containsKey(key: 'token')) {
+    if (await const FlutterSecureStorage().containsKey(key: 'typeId')) {
       String? type = await FlutterSecureStorage().read(key: 'typeId');
 
       if (int.parse(type!) == 2) {
@@ -423,7 +423,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _checkLogin() async {
-    exists = await const FlutterSecureStorage().containsKey(key: "token");
+    exists = await const FlutterSecureStorage().containsKey(key: "typeId");
     setState(() {
       if (exists) {
         _currentPage = const ProfilePageBasic();
@@ -554,7 +554,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> showName() async {
     if (_isDisposed) return;
 
-    if (await const FlutterSecureStorage().containsKey(key: 'token')) {
+    if (await const FlutterSecureStorage().containsKey(key: 'typeId')) {
       String? fistName = await FlutterSecureStorage().read(key: 'fistName');
       String? gender = await FlutterSecureStorage().read(key: 'genderId');
       if (int.parse(gender!) == 1) {
