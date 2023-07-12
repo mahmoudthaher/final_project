@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:project/Providers/user_provider.dart';
@@ -151,57 +153,57 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 140,
-                        child: TextFormField(
-                          controller: phoneNumberController,
-                          maxLength: 10,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          style: const TextStyle(
-                              fontSize: 20,
-                              height: 2,
-                              fontWeight: FontWeight.w500),
-                          keyboardType: TextInputType.phone,
-                          cursorHeight: 50,
-                          cursorWidth: 2,
-                          decoration: const InputDecoration(
-                            hintText: 'رقم الهاتف',
-                            hintStyle: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w800),
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 5),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(40),
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 3.0,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(40),
-                              ),
-                            ),
-                            errorStyle: TextStyle(
-                                fontSize: 15.0, fontWeight: FontWeight.w700),
-                            errorMaxLines: 2,
-                            counterText: '',
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "الرجاء إدخال رقم الهاتف";
-                            } else if (!validateJordanianPhoneNumber(value)) {
-                              return " الرجاء إدخال رقم الهاتف بطريقة صحيحة 07xxxxxxxx";
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 30),
+                    //   child: SizedBox(
+                    //     width: double.infinity,
+                    //     height: 140,
+                    //     child: TextFormField(
+                    //       controller: phoneNumberController,
+                    //       maxLength: 10,
+                    //       autovalidateMode: AutovalidateMode.onUserInteraction,
+                    //       style: const TextStyle(
+                    //           fontSize: 20,
+                    //           height: 2,
+                    //           fontWeight: FontWeight.w500),
+                    //       keyboardType: TextInputType.phone,
+                    //       cursorHeight: 50,
+                    //       cursorWidth: 2,
+                    //       decoration: const InputDecoration(
+                    //         hintText: 'رقم الهاتف',
+                    //         hintStyle: TextStyle(
+                    //             fontSize: 20, fontWeight: FontWeight.w800),
+                    //         contentPadding: EdgeInsets.symmetric(
+                    //             horizontal: 30, vertical: 5),
+                    //         border: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.all(
+                    //             Radius.circular(40),
+                    //           ),
+                    //         ),
+                    //         focusedBorder: OutlineInputBorder(
+                    //           borderSide: BorderSide(
+                    //             width: 3.0,
+                    //           ),
+                    //           borderRadius: BorderRadius.all(
+                    //             Radius.circular(40),
+                    //           ),
+                    //         ),
+                    //         errorStyle: TextStyle(
+                    //             fontSize: 15.0, fontWeight: FontWeight.w700),
+                    //         errorMaxLines: 2,
+                    //         counterText: '',
+                    //       ),
+                    //       validator: (value) {
+                    //         if (value == null || value.isEmpty) {
+                    //           return "الرجاء إدخال رقم الهاتف";
+                    //         } else if (!validateJordanianPhoneNumber(value)) {
+                    //           return " الرجاء إدخال رقم الهاتف بطريقة صحيحة 07xxxxxxxx";
+                    //         }
+                    //         return null;
+                    //       },
+                    //     ),
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 100),
                       child: SizedBox(
@@ -212,37 +214,46 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           highlightColor: Colors.transparent,
                           onTap: () async {
                             if (_keyForm.currentState!.validate()) {
-                              await checkUserAndPhone(UserModel(
-                                  email: emailController.text,
-                                  phoneNumber: phoneNumberController.text));
-                              if (checkphoneAndEmail == 1) {
-                                final provider = Provider.of<UserProvider>(
-                                    context,
-                                    listen: false);
-                                provider.forgetId = id!;
+                              FirebaseAuth.instance
+                                  .sendPasswordResetEmail(
+                                      email: emailController.text)
+                                  .then((value) {
+                                widget.onBack();
                                 EasyLoading.dismiss();
-                                EasyLoading.showSuccess("تم التحقق بنجاح");
+                                EasyLoading.showSuccess(
+                                    "تم ارسال رسالة التعين الى بريدك الإلكتروني");
+                              });
+                              // await checkUserAndPhone(UserModel(
+                              //     email: emailController.text,
+                              //     phoneNumber: phoneNumberController.text));
+                              // if (checkphoneAndEmail == 1) {
+                              //   final provider = Provider.of<UserProvider>(
+                              //       context,
+                              //       listen: false);
+                              //   provider.forgetId = id!;
+                              //   EasyLoading.dismiss();
+                              //   EasyLoading.showSuccess("تم التحقق بنجاح");
 
-                                Navigator.pushNamed(
-                                    context, "/resetPasswordPage");
-                              } else {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text('المعلومات غير صحيحة'),
-                                      actions: [
-                                        TextButton(
-                                          child: const Text('رجوع'),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
+                              //   Navigator.pushNamed(
+                              //       context, "/resetPasswordPage");
+                              // } else {
+                              //   showDialog(
+                              //     context: context,
+                              //     builder: (BuildContext context) {
+                              //       return AlertDialog(
+                              //         title: const Text('المعلومات غير صحيحة'),
+                              //         actions: [
+                              //           TextButton(
+                              //             child: const Text('رجوع'),
+                              //             onPressed: () {
+                              //               Navigator.pop(context);
+                              //             },
+                              //           ),
+                              //         ],
+                              //       );
+                              //     },
+                              //   );
+                              // }
                             }
                           },
                           child: Container(

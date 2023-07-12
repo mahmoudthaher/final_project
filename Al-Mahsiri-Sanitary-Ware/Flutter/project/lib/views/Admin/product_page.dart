@@ -1355,6 +1355,8 @@ class _ProductAdminState extends State<ProductAdmin> {
                         imageontroller.text = "";
                         setState(() {
                           selectedCategoryC = null;
+                          image2 = null;
+                          image = null;
                         });
                         //update
                         nameController2.text = "";
@@ -1438,6 +1440,8 @@ class _ProductAdminState extends State<ProductAdmin> {
                         imageontroller.text = "";
                         setState(() {
                           selectedCategoryC = null;
+                          image2 = null;
+                          image = null;
                         });
                         //update
                         nameController2.text = "";

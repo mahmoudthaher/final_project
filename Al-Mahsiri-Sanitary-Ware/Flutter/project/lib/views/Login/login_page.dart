@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -19,6 +20,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool checkLogin = false;
   Widget _currentPage = const LoginPage();
   final _keyForm = GlobalKey<FormState>();
   bool obscureText = false;
@@ -227,39 +229,56 @@ class _LoginPageState extends State<LoginPage> {
                                   onTap: () {
                                     setState(() {
                                       if (_keyForm.currentState!.validate()) {
-                                        try {
-                                          UserController()
-                                              .login(userProvider.login(
-                                                  emailController.text,
-                                                  passwordController.text))
-                                              .then((value) {
+                                        if (checkLogin == false) {
+                                          try {
+                                            UserController()
+                                                .login(userProvider.login(
+                                                    emailController.text,
+                                                    passwordController.text))
+                                                .then((value) {
+                                              UserController()
+                                                  .informationUser(
+                                                emailController.text,
+                                              )
+                                                  .then((value) {
+                                                checkType().then((value) {
+                                                  EasyLoading.dismiss();
+                                                  EasyLoading.showSuccess(
+                                                      "تم تسجيل الدخول بنجاح");
+                                                });
+                                              }).catchError((ex) {
+                                                print(ex);
+                                              });
+                                            }).catchError((ex) {
+                                              setState(() {
+                                                checkLogin = true;
+                                              });
+                                            });
+                                          } catch (ex) {
+                                            EasyLoading.dismiss();
+                                            EasyLoading.showError(
+                                                ex.toString());
+                                          }
+                                        } else if (checkLogin == true) {
+                                          signin().then((value) {
                                             UserController()
                                                 .informationUser(
                                               emailController.text,
                                             )
                                                 .then((value) {
-                                              checkType();
-                                              // setState(() {
-                                              // Navigator.pushNamedAndRemoveUntil(
-                                              //   context,
-                                              //   "/bottomnavigation",
-                                              //   (route) => false,
-                                              // );
-                                              // _currentPage = BottomNavigation();
-                                              // });
-                                              EasyLoading.dismiss();
-                                              EasyLoading.showSuccess(
-                                                  "تم تسجيل الدخول بنجاح");
+                                              checkType().then((value) {
+                                                EasyLoading.dismiss();
+                                                EasyLoading.showSuccess(
+                                                    "تم تسجيل الدخول بنجاح");
+                                              });
                                             }).catchError((ex) {
-                                              print(ex);
+                                              loginController.text =
+                                                  "إسم المستخدم او كلمة المرور غير صحيحة";
                                             });
                                           }).catchError((ex) {
                                             loginController.text =
                                                 "إسم المستخدم او كلمة المرور غير صحيحة";
                                           });
-                                        } catch (ex) {
-                                          EasyLoading.dismiss();
-                                          EasyLoading.showError(ex.toString());
                                         }
                                       }
                                     });
@@ -290,7 +309,7 @@ class _LoginPageState extends State<LoginPage> {
                                   const EdgeInsets.symmetric(horizontal: 40),
                               child: TextField(
                                 style: const TextStyle(
-                                    fontSize: 19,
+                                    fontSize: 18,
                                     color: Colors.red,
                                     fontWeight: FontWeight.w800),
                                 controller: loginController,
@@ -412,5 +431,10 @@ class _LoginPageState extends State<LoginPage> {
         // typeId = int.parse(type);
       }
     }
+  }
+
+  Future signin() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text, password: passwordController.text);
   }
 }

@@ -23,6 +23,7 @@ class _DesignProductsPageState extends State<DesignProductsPage> {
     final productProvider =
         Provider.of<ProductProvider>(context, listen: false);
     productProvider.getAllProductsByCategoryID();
+    Provider.of<CategoryProvider>(context, listen: false).getAllCategory();
   }
 
   @override

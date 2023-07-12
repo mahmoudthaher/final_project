@@ -759,19 +759,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                               emailController.text,
                                             )
                                                 .then((value) {
-                                              // signup().then((value) => signin());
-                                              // if (_character2!.index + 1 == 2) {
-                                              //   Navigator
-                                              //       .pushNamedAndRemoveUntil(
-                                              //     context,
-                                              //     "/bottomNavigationAdmin",
-                                              //     (route) => false,
-                                              //   );
-                                              // }
-                                              Navigator.pushReplacementNamed(
-                                                context,
-                                                "/bottomnavigation",
-                                              );
+                                              signup().then((value) =>
+                                                  signin().then((value) {
+                                                    Navigator
+                                                        .pushReplacementNamed(
+                                                      context,
+                                                      "/bottomnavigation",
+                                                    );
+                                                  }));
                                             }).catchError((ex) {
                                               print("1$ex");
                                             });
